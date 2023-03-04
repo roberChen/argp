@@ -62,13 +62,15 @@ func TestArgp(t *testing.T) {
 			Usage:   "the root command",
 			Options: &cc.defaultValues,
 			Command: func(opts *Options) error {
-				if !reflect.DeepEqual(cc.defaultValues, cc.expected) {
-					t.Errorf("not equal: \nexpected: %+v, got\n %+v", cc.expected, cc.defaultValues)
+				if !reflect.DeepEqual(*opts, cc.expected) {
+					t.Errorf("not equal: \nexpected: %+v, got\n %+v", cc.expected, *opts)
 				}
 				return nil
 			},
 		}
-		cmd.Run(cc.args)
+		if err := cmd.Run(cc.args); err != nil {
+			t.Errorf("cmd run error: %s", err)
+		}
 	}
 }
 
@@ -105,17 +107,7 @@ func TestSubCmd(t *testing.T) {
 			args:            strings.Split("-i 12 sub", " "),
 			expectedRoot:    Options{IntOptions: 12, StringOption: "pike"},
 			expectedSub:     SubCmdOpt{A: 1},
-			expectedRootRun: true, expectedSubRun: false,
-		},
-		{
-			rootVals: Options{
-				StringOption: "pike",
-			},
-			subValues:       SubCmdOpt{A: 1},
-			args:            strings.Split("sub -i 12", " "),
-			expectedRoot:    Options{IntOptions: 12, StringOption: "pike"},
-			expectedSub:     SubCmdOpt{A: 1},
-			expectedRootRun: true, expectedSubRun: false,
+			expectedRootRun: false, expectedSubRun: true,
 		},
 	}
 
@@ -128,8 +120,8 @@ func TestSubCmd(t *testing.T) {
 				if !cc.expectedRootRun {
 					t.Errorf("root cmd is not expected to run")
 				}
-				if !reflect.DeepEqual(cc.rootVals, cc.expectedRoot) {
-					t.Errorf("not equal: \nexpected: %+v, got\n%+v", cc.expectedRoot, cc.rootVals)
+				if !reflect.DeepEqual(*opts, cc.expectedRoot) {
+					t.Errorf("not equal: \nexpected: %+v, got\n%+v", cc.expectedRoot, *opts)
 				}
 				return nil
 			},
@@ -145,13 +137,14 @@ func TestSubCmd(t *testing.T) {
 				if !reflect.DeepEqual(cc.rootVals, cc.expectedRoot) {
 					t.Errorf("not equal: \nexpected: %+v, got\n%+v", cc.expectedRoot, cc.rootVals)
 				}
-				if !reflect.DeepEqual(cc.subValues, cc.expectedSub) {
-					t.Errorf("not equal: \nexpected: %+v, got\n%+v", cc.expectedSub, cc.subValues)
+				if !reflect.DeepEqual(*opts, cc.expectedSub) {
+					t.Errorf("not equal: \nexpected: %+v, got\n%+v", cc.expectedSub, *opts)
 				}
 				return nil
 			},
 		})
-		cmd.Run(cc.args)
-
+		if err := cmd.Run(cc.args); err != nil {
+			t.Errorf("cmd run failed: %s", err)
+		}
 	}
 }

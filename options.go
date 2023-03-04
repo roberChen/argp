@@ -20,7 +20,7 @@ func parseOptions(flagset **flag.FlagSet, option any, args []string) ([]string, 
 	}
 	optval := reflect.Indirect(optptr)
 	if optval.Kind() != reflect.Struct {
-		return nil, fmt.Errorf("options is not pointer to struct")
+		return nil, fmt.Errorf("options is not pointer to struct but %s", optval.Kind())
 	}
 	*flagset = flag.NewFlagSet(optval.Type().Name(), flag.ExitOnError) // the flag set for option
 	flagSet := *flagset

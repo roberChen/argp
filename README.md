@@ -39,4 +39,4 @@ var cmd := &Cmd[Option]{
 To run the command, just use `cmd.Run(os.Args[1:])` to pass in the root arguments, note that for `Cmd` implentaions, don't pass in the name of the command itself.
 
 If you want to use sub command, and want to use arguments from parent command, you should defines the option object first, and pass the pointer to parent's `Options` filed. 
-You can visit your parent's option in the sub-command's `Command` function.
+You can visit your parent's option in the sub-command's `Command` function. Note that all flags for parent arguments should be geven before sub command start.

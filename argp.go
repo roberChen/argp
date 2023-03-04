@@ -43,7 +43,7 @@ func (cmd *Cmd[OptType]) AddSubCmd(subcmd Command) {
 
 func (cmd *Cmd[OptType]) Run(args []string) error {
 	// parse cmds to options
-	restArg, err := parseOptions(&cmd.flagSet, &cmd.Options, args)
+	restArg, err := parseOptions(&cmd.flagSet, cmd.Options, args)
 	if err != nil {
 		return err
 	}
