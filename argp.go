@@ -46,7 +46,7 @@ func (cmd *Cmd[OptType]) AddSubCmd(subcmd Command) {
 
 func (cmd *Cmd[OptType]) Run(args []string) error {
 	// parse cmds to options
-	restArg, err := parseOptions(&cmd.flagSet, cmd.Options, args)
+	restArg, err := cmd.parseOptions(cmd.Options, args)
 	if err != nil {
 		return err
 	}
@@ -61,7 +61,7 @@ func (cmd *Cmd[OptType]) Run(args []string) error {
 
 func (cmd *Cmd[OptType]) Help() string {
 	var s strings.Builder
-	s.WriteString(fmt.Sprintf("command %s:\n%s\nparameters:\n", cmd.Name(), cmd.Usage))
+	s.WriteString(fmt.Sprintf("Command %s:\n%s\n", cmd.Name(), cmd.Usage))
 	cmd.flagSet.SetOutput(&s)
 	cmd.flagSet.Usage()
 	if len(cmd.SubCommands) > 0 {
