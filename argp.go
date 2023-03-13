@@ -32,6 +32,9 @@ type Cmd[OptType any] struct {
 }
 
 func (cmd *Cmd[OptType]) AddSubCmd(subcmd Command) {
+	if subcmd == nil {
+		panic("adding nil command")
+	}
 	if cmd.SubCommands == nil {
 		cmd.SubCommands = make(map[string]Command)
 	}
