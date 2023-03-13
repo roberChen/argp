@@ -39,7 +39,7 @@ func (cmd *Cmd[OptType]) AddSubCmd(subcmd Command) {
 		cmd.SubCommands = make(map[string]Command)
 	}
 	if _, ok := cmd.SubCommands[subcmd.Name()]; ok {
-		panic(fmt.Errorf("sub-command %q for command %q has already been registerd!", subcmd.Name(), cmd.CmdName))
+		panic(fmt.Errorf("sub-command %q for command %q has already been registerd", subcmd.Name(), cmd.CmdName))
 	}
 	cmd.SubCommands[subcmd.Name()] = subcmd
 }
